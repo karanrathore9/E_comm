@@ -1,0 +1,36 @@
+
+
+.cartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.cartTable {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.cartTableRow {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 10px;
+}
+
+.cartTableHeader {
+  font-weight: bold;
+}
+
+.cartTableCell {
+  flex-basis: 20%;
+  padding: 10px;
+}
+
+.cartTableCell:first-child {
+  flex-basis: 10%;
+}
