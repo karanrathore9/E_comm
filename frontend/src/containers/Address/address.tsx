@@ -12,10 +12,19 @@ import {
   saveSelectedAddress,
 } from "../../features/Store/Slices/addressSlice";
 
+export interface AddressType {
+  houseNo: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+}
+
 const Address = () => {
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [address, setAddress] = useState({
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [address, setAddress] = useState<AddressType>({
     houseNo: "",
     street: "",
     city: "",
@@ -44,12 +53,12 @@ const Address = () => {
         setAddresses(res.data.addresses);
         dispatch(setMultipleAddresses(res.data.addresses));
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         console.log(err);
       });
   };
 
-  const handleAddressSelection = (address: any) => {
+  const handleAddressSelection = (address: string) => {
     setSelectedAddress(address);
     dispatch(saveSelectedAddress(address));
     localStorage.setItem("selectedAddress", address);
@@ -81,8 +90,8 @@ const Address = () => {
       <h2>Select an address:</h2>
       <form>
         {addresses &&
-          addresses.length &&
-          addresses.map((address, index) => {
+          addresses.length > 0 &&
+          addresses.map((address: string, index: number) => {
             return (
               <div key={index}>
                 <label>
@@ -105,7 +114,6 @@ const Address = () => {
           <p>{selectedAddress}</p>
         </div>
       )}
-
       <Button variant="primary" onClick={handleShow}>
         Add New Address
       </Button>
@@ -187,3 +195,6 @@ const Address = () => {
 };
 
 export default Address;
+
+
+

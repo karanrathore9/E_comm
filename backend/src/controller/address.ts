@@ -3,10 +3,13 @@ import Address from "../models/address";
 
 export const postUserAddress = async (req: Request, res: Response) => {
   console.log("idhar hi error hai!");
+  const userId = res.locals.user._id;
+  // const userId = req.body.user._id;
+
   try {
     console.log("idhar hi error hai!!!!!!");
 
-    const user = req.params.userId;
+    const user = userId;
     console.log(user);
     const { houseNo, street, city, state, country, zipCode } = req.body;
     console.log(req.body, "📱📱📱");
@@ -39,7 +42,7 @@ export const postUserAddress = async (req: Request, res: Response) => {
     } else {
       console.log("Hello");
       const newAddress = new Address({
-        user: req.params.userId,
+        user:userId,
         addresses: [{ houseNo, street, city, state, country, zipCode }],
       });
       await newAddress.save();
@@ -55,9 +58,9 @@ export const postUserAddress = async (req: Request, res: Response) => {
 };
 
 export const getUserAddress = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
   //console.log("fdjshfgdjhfdshjfdhj++++===");
   try {
-    const userId = req.params.userId;
     const address = await Address.findOne({ user: userId });
 
     if (!address) {

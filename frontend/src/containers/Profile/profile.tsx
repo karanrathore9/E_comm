@@ -5,8 +5,9 @@ import { Modal, Button } from "react-bootstrap";
 import "./style.css";
 import apiService from "../../services/Profile";
 import { useSelector } from "react-redux";
+import { IUserData } from "../../features/Store/Slices/userSlice";
 
-interface IUser {
+export interface IUser {
   email?: string;
   firstName?: string;
   fullName?: string;
@@ -25,13 +26,13 @@ const ViewProfile = () => {
   const [userProfile, setUserProfile] = useState<IUser>({});
   const userId = localStorage.getItem("userId");
   const [show, setShow] = useState(false);
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState<File>();
 
-  const data = useSelector((state:any) => {
+  const data = useSelector((state: IUserData) => {
     return state.user;
   })
 
-  console.log(data,"🧟🧟🧟🧟")
+  console.log(data, "🧟🧟🧟🧟")
 
   useEffect(() => {
     fetchUserProfile();
@@ -51,7 +52,7 @@ const ViewProfile = () => {
   };
 
   const updateUser = async () => {
-   
+
     const updatedUserProfile = await apiService.updateUserProfile(
       userId,
       userProfile
@@ -109,8 +110,11 @@ const ViewProfile = () => {
           <input
             type="file"
             placeholder={"Profile Picture"}
-            onChange={(e: any) => {
-              setProfilePicture(e.target.files[0]);
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.files && e.target.files[0]) {
+                setProfilePicture(e.target.files[0]);
+              }
+              // setProfilePicture(e.target.files[0]);
             }}
           ></input>
         </Modal.Body>

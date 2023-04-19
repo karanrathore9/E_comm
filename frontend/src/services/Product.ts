@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ProductData } from "../containers/Products/product";
 
 const BASE_URL = "http://localhost:2000/api/";
 
@@ -36,7 +37,7 @@ export const getAllProducts = async (
 };
 
 export const addToCart = async (
-  userId: any,
+  userId: string | null,
   productId: string,
   price: number
 ) => {
@@ -62,14 +63,14 @@ export const addToCart = async (
   }
 };
 
-export const addToWishlist = async (userId: any, productId: any) => {
+export const addToWishlist = async (userId: string | null, productId: string | null) => {
   const requestBody = {
     productId: productId,
   };
   try {
     const response = await axios.post(
       `${BASE_URL}/user/addtowishlist/${userId}`,
-      requestBody
+      requestBody, { headers }
     );
     console.log("Product added to wishlist:", response);
   } catch (error) {
@@ -101,7 +102,7 @@ export const deleteProductById = async (id: string): Promise<void> => {
 
 const URL = "http://localhost:2000/api/";
 
-export const getProductDetails = async (id: any) => {
+export const getProductDetails = async (id: string | null) => {
   try {
     const response = await axios.get(URL + `products/get/${id}`);
     return response.data.product;
@@ -111,7 +112,7 @@ export const getProductDetails = async (id: any) => {
   }
 };
 
-export const updateProduct = async (id: any, product: any) => {
+export const updateProduct = async (id: string | null, product: string | null) => {
   try {
     const response = await axios.put(
       API_URL + `product/update/${id}`,
@@ -136,7 +137,7 @@ export const getCategories = async () => {
 };
 
 export const ProductService = {
-  createProduct: async (productData: any) => {
+  createProduct: async (productData: ProductData) => {
     const form = new FormData();
     form.append("name", productData.name);
     form.append("price", productData.price);

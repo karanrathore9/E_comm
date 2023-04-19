@@ -1,6 +1,18 @@
 import express, { NextFunction, Request, response, Response } from "express";
 import Cart from "../models/cart";
 
+// interface CartItem {
+//   _id: string;
+//   product: string;
+//   price: number;
+//   quantity: number;
+// }
+
+interface ICartItem {
+  product: string;
+  quantity: number;
+}
+
 export const addItemToCart = (req: Request, res: Response) => {
   // Cart.findOne({ user: res.locals.user._id })
   Cart.findOne({ user: req.params.id })
@@ -28,7 +40,7 @@ export const addItemToCart = (req: Request, res: Response) => {
               },
             }
           )
-            .then((_cart): any => {
+            .then((_cart) => {
               return res.status(201).json({ _cart });
             })
             .catch((error) => {
@@ -43,7 +55,7 @@ export const addItemToCart = (req: Request, res: Response) => {
               },
             }
           )
-            .then((_cart): any => {
+            .then((_cart) => {
               return res.status(201).json({ _cart });
             })
             .catch((error) => {
@@ -92,12 +104,13 @@ export const removeItemFromCart = async (req: Request, res: Response) => {
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
+    
 
     let aitom = null;
 
     const product = req.params.productId;
 
-    cart.cartItems.forEach((item: any): any => {
+    cart.cartItems.forEach((item: any) => {
       if (item.product == product) {
         console.log(item.product, "KAran");
         aitom = item.product;
@@ -157,4 +170,3 @@ export const removeItemQuantityFromCart = async (req: Request, res: Response) =>
     return res.status(500).json({ error });
   }
 };
-

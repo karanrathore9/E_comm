@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface IUserData {
+  [x: string]: any;
   email?: string;
   firstName?: string;
   fullName?: string;

@@ -10,14 +10,14 @@ import {
 const router = express.Router();
 
 // router.post("/user/cart/addtocart", requireSignin, userMiddleware, addItemToCart);
-router.post("/user/cart/addtocart/:id", addItemToCart);
+router.post("/user/cart/addtocart/:id", requireSignin, userMiddleware, addItemToCart);
 
-router.get("/user/cart/getcart/:id", getCartByUserId);
+router.get("/user/cart/getcart/:id", requireSignin, userMiddleware, getCartByUserId);
 
-router.delete("/user/cart/remove/:id/:productId", removeItemFromCart);
+router.delete("/user/cart/remove/:id/:productId", requireSignin, userMiddleware, removeItemFromCart);
 
 router.delete(
-  "/user/cart/removequantity/:id/:productId",
+  "/user/cart/removequantity/:id/:productId", requireSignin, userMiddleware,
   removeItemQuantityFromCart
 );
 

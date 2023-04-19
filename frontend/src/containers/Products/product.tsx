@@ -7,7 +7,7 @@ import "./style.css";
 import Product from "../UserProductListing/productListing";
 import { ProductService } from "../../services/Product"; // Import the ProductService
 
-interface ProductData {
+export interface ProductData {
   name: string;
   price: string;
   description: string;
@@ -33,7 +33,6 @@ const Products =  () => {
   const [categoryName, setCategoryName] = useState<string>("");
   const [show, setShow] = useState<boolean>(false);
   const [productDetailModal, setProductDetailModal] = useState<boolean>(false);
-  const [productDetails, setProductDetails] = useState<any>(null);
 
   const handleClose = () => {
     setShow(false);

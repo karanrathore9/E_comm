@@ -1,3 +1,4 @@
+
 import express, { NextFunction, Request, Response } from "express";
 import envData from "../utils/utils.env";
 import jwt from "jsonwebtoken";
@@ -7,7 +8,7 @@ export const requireSignin = (req: any, res: Response, next: NextFunction) => {
     const token = req.headers.authorization.split(" ")[1];
     const user = jwt.verify(token, envData.jwt_secret);
     req.user = user;
-    console.log(user,"fdfgdfgdfgdfgdf");
+    console.log(user, "fdfgdfgdfgdfgdf");
     next();
   } else
     res.status(400).json({

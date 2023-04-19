@@ -2,17 +2,19 @@ import express, { NextFunction, Request, response, Response } from "express";
 import WishList from "../models/wishList";
 import { log } from 'console';
 
-export const addToWishList = async (req :Request, res:Response) => {
+export const addToWishList = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  console.log(userId,"jkghfkdjg++")
 
-//   const { userId } = req.params;
+  //   const { userId } = req.params;
   const { productId } = req.body;
 
   try {
-    const wishList = await WishList.findOne({ user: req.params.id });
+    const wishList = await WishList.findOne({ user: userId });
 
     if (!wishList) {
       const newWishList = new WishList({
-        user: req.params.id,
+        user: userId,
         wishListItem: [productId],
       });
       await newWishList.save();
@@ -40,11 +42,11 @@ export const addToWishList = async (req :Request, res:Response) => {
 };
 
 
-export const getWishList = async (req:Request, res:Response) => {
-//   const { userId } = req.params.id;
+export const getWishList = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
 
   try {
-    const wishList = await WishList.findOne({ user: req.params.id }).populate(
+    const wishList = await WishList.findOne({ user: userId }).populate(
       "wishListItem"
     );
 

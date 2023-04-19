@@ -7,7 +7,7 @@ import {
   updatePassword,
   updateUserById,
 } from "../controller/user";
-import { requireSignin } from "../middlewares/index";
+import { requireSignin, userMiddleware } from "../middlewares/index";
 import multer from "multer";
 import shortid from "shortid";
 import path from "path";
@@ -34,12 +34,12 @@ router.post("/signin", signin);
 
 router.post("/signup", signup);
 
-router.get("/user/:userId", getUserById);
+router.get("/user/:userId",requireSignin, userMiddleware, getUserById);
 
-router.put("/users/:userId", updatePassword);
+router.put("/users/:userId",requireSignin, userMiddleware, updatePassword);
 
 router.put(
-  "/users/update/:userId",
+  "/users/update/:userId", requireSignin, userMiddleware,
   upload.single("profilePicture"),
   updateUserById
 );

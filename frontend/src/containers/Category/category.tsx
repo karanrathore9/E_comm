@@ -5,23 +5,22 @@ import Input from "../../components/UI/input";
 import "./style.css";
 import { getCategory, createCategory } from "../../services/Category";
 
-
 interface ICategory {
   _id: number;
   name: string;
   children: ICategory[];
 }
 
-const Category = (props: any) => {
+const Category: React.FC = () => {
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [categoryName, setCategoryName] = useState("");
-  const [parentCategoryId, setParentCategoryId] = useState("");
-  const [categoryImage, setCategoryImage] = useState("");
-  const [show, setShow] = useState(false);
+  const [categoryName, setCategoryName] = useState<string>("");
+  const [parentCategoryId, setParentCategoryId] = useState<string>("");
+  const [categoryImage, setCategoryImage] = useState<File>();
+  const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const categoryList = await getCategory();
+      const categoryList: ICategory[] = await getCategory();
       setCategories(categoryList);
     };
     fetchCategories();
@@ -68,8 +67,10 @@ const Category = (props: any) => {
     ));
   };
 
-  const handleCategoryImage = (e:any) => {
-    setCategoryImage(e.target.files[0]);
+  const handleCategoryImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCategoryImage(e.target.files[0]);
+    }
   };
 
   return (
@@ -117,7 +118,7 @@ const Category = (props: any) => {
               type="file"
               name="CategoryImage"
               onChange={handleCategoryImage}
-            ></input>
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -134,3 +135,5 @@ const Category = (props: any) => {
 };
 
 export default Category;
+
+

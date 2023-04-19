@@ -4,6 +4,7 @@ import shortid from "shortid";
 import slugify from "slugify";
 import Category from "../models/category";
 import escapeStringRegexp from "escape-string-regexp";
+import Joi from "joi";
 interface CreateProductRequestBody {
   name: string;
   price: number;
@@ -17,6 +18,24 @@ interface CreateProductRequestBody {
 //   img: string;
 // }
 
+// const createProductSchema = Joi.object({
+//   name: Joi.string().min(3).required(),
+//   price: Joi.number().min(1).required(),
+//   description: Joi.string().min(10).required(),
+//   productPicture: Joi.string().uri(),
+//   category: Joi.string().required(),
+//   createdBy: Joi.string().required(),
+// });
+
+// const updateProductSchema = Joi.object({
+//   name: Joi.string().optional(),
+//   price: Joi.number().optional(),
+//   description: Joi.string().optional(),
+//   productPicture: Joi.string().uri().optional(),
+//   category: Joi.string().optional(),
+// });
+
+
 export const createProduct = async (
   req: Request,
   res: Response,
@@ -24,6 +43,10 @@ export const createProduct = async (
 ) => {
   console.log("here it is")
   try {
+    // const { error, value } = createProductSchema.validate(req.body);
+    // if (error) {
+    //   throw new Error(error.message);
+    // }
     const { name, price, description, category } = req.body;
 
     // let productPictures: ProductPicture[] = [];
@@ -128,6 +151,12 @@ export const getProductsByCategory = (req: Request, res: Response) => {
 
 export const updateProductById = (req: Request, res: Response) => {
 
+  // try {
+    // const { error, value } = updateProductSchema.validate(req.body);
+    // if (error) {
+    //   throw new Error(error.message);
+    // }
+
   let productUrl;
   if (req.file) {
     productUrl = "http://localhost:2000/" + req.file.filename;
@@ -155,6 +184,11 @@ export const updateProductById = (req: Request, res: Response) => {
     .catch((error) => {
       res.status(400).json({ error });
     });
+  // } 
+  // catch (error) {
+  //   res.status(400).json({ error });
+   
+  // }
 };
 
 
@@ -178,147 +212,3 @@ export const searchProduct = async (req: Request, res: Response) => {
     res.status(500).send("Server Error");
   }
 };
-
-// export const searchProduct = async (req: Request, res: Response) => {
-//   const  keyword  = req.params.key;
-//   try {
-//     const products = await Product.find({
-//       $or: [
-//         { name: { $regex: keyword, $options: "i" } },
-//       ],
-//     })
-//       .populate("category")
-//       .lean()
-//       .exec();
-//     res.status(200).json({ products });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Server Error");
-//   }
-// };
-
-
-
-// export const getProduct = (req: Request, res: Response) => {
-//  Product.find()
-//    .populate("category")
-//    .lean()
-//    .exec()
-//    .then((products) => {
-//      res.status(200).json({ products });
-//    })
-//    .catch((error) => {
-//      res.status(400).json({ error });
-//    });
-// };
-
-// export const getProductDetailsById = (req: Request, res: Response) => {
-//   const { productId } = req.params;
-//   if (productId) {
-//     Product.findOne({ _id: productId })
-//       .exec()
-//       .then((product) => {
-//         if (product) {
-//           res.status(200).json({ product });
-//         } else {
-//           res.status(404).json({ error: "Product not found" });
-//         }
-//       })
-//       .catch((error) => {
-//         res.status(400).json({ error });
-//       });
-//   } else {
-//     return res.status(400).json({ error: "Params required" });
-//   }
-// };
-
-// export const deleteProductById = (req: Request, res: Response) => {
-//   const { productId } = req.body.payload;
-//   if (productId) {
-//     Product.deleteOne({ _id: productId })
-//       .exec()
-//       .then((result) => {
-//         res.status(202).json({ result });
-//       })
-//       .catch((error) => {
-//         res.status(400).json({ error });
-//       });
-//   } else {
-//     res.status(400).json({ error: "Params required" });
-//   }
-// };
-
-// export const searchProductByKey = (req: Request, res: Response) => {
-//   const regex = new RegExp(escapeStringRegexp(req.params.key), "i");
-//   Product.find({
-//     $or: [
-//       { name: { $regex: regex } },
-//       { price: { $regex: regex } },
-//       { category: { $regex: regex } },
-//     ],
-//   })
-//     .then((products) => {
-//       res.status(200).json({ products });
-//     })
-//     .catch((error) => {
-//       res.status(400).json({ error });
-//     });
-// };
-
-// export const searchProductByKey = (req: Request, res: Response) => {
-//   Product.find({
-//     $or: [
-//        { name:  { $regex: req.params.key, $options: "i" } },
-//       //  { price: { $regex: req.params.key, $options: "i" } },
-//       // { category: { $regex: req.params.key, $options: "i" } },
-//     ],
-//   })
-//     .then((products) => {
-//       res.status(200).json({ products });
-//     })
-//     .catch((error) => {
-//       res.status(400).json({ error });
-//     });
-// };
-
-// import express, { NextFunction, Request, Response } from "express";
-// import shortid from "shortid";
-// import slugify from "slugify";
-// import Product from "../models/product";
-
-// export const createProduct = (req: Request, res: Response) => {
-//   const user = res.locals.user;
-//   // console.log("Hello Product", user._id);
-//   // res.status(200).json({
-//   //   file: req.files,
-//   //   body: req.body,
-//   // });
-
-//   const { name, price, description, productPictures, category, createdBy} = req.body;
-//   let productPictures =[];
-
-//   if(req.files.length>0){
-//     productPictures = req.files.map(file => {
-//       return {img: file.filename }
-//     })
-//   }
-
-//   const product = new Product({
-//     name: name,
-//     slug: slugify(name),
-//     price,
-//     description,
-//     productPictures,
-//     category,
-//     createdBy: res.locals.user,
-//   });
-
-//   product.save().then((product) => {
-//     return res.status(201).json({product});
-
-//   }).catch((error) => {
-//     return res.status(400).json({error});
-
-//   })
-
-// };

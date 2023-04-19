@@ -1,22 +1,25 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import apiService from "../../services/Profile";
 
+export interface FormData {
+  currentPassword: string;
+  newPassword: string;
+}
+
 const updatePassword = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     currentPassword: "",
     newPassword: "",
   });
 
   const userId = localStorage.getItem("userId");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     apiService
@@ -29,6 +32,7 @@ const updatePassword = () => {
         console.error(error);
       });
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -55,4 +59,5 @@ const updatePassword = () => {
 };
 
 export default updatePassword;
+
 

@@ -12,9 +12,22 @@ import {
   decrementCounter,
 } from "../../features/Store/Slices/cartSlice";
 
-const Cart = () => {
-  const [cart, setCart] = useState([]);
-  const [isEmpty, setIsEmpty] = useState(false);
+interface Product {
+  _id: string;
+  name: string;
+  productPicture: string;
+}
+
+interface CartItem {
+  _id: string;
+  product: Product;
+  price: number;
+  quantity: number;
+}
+
+const Cart = (): JSX.Element => {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const userId = localStorage.getItem("userId");
@@ -23,7 +36,7 @@ const Cart = () => {
     getCart();
   }, []);
 
-  const getCart = () => {
+  const getCart = (): void => {
     CartService.getCart(userId)
       .then((res) => {
         console.log(res.data.cart.cartItems);
@@ -43,7 +56,7 @@ const Cart = () => {
     }
   }, [cart]);
 
-  const removeItem = (id: string) => {
+  const removeItem = (id: string): void => {
     CartService.removeItem(userId, id)
       .then((res) => {
         console.log(res);
@@ -54,7 +67,7 @@ const Cart = () => {
       });
   };
 
-  const removeItemQuantity = (id: string) => {
+  const removeItemQuantity = (id: string): void => {
     CartService.removeItemQuantity(userId, id)
       .then((res) => {
         console.log(res);
@@ -65,7 +78,7 @@ const Cart = () => {
       });
   };
 
-  const addToCart = (id: string, price: string) => {
+  const addToCart = (id: string, price: number): void => {
     const requestBody = {
       cartItems: [
         {
@@ -100,7 +113,7 @@ const Cart = () => {
               <div className="cartTableCell">Image</div>
               <div className="cartTableCell">Total</div>
             </div>
-            {cart.map((item: any) => (
+            {cart.map((item: CartItem) => (
               <div key={item._id} className="cartTableRow">
                 <div className="cartTableCell">{item.product.name}</div>
                 <div className="cartTableCell">{item.price}</div>
@@ -147,3 +160,8 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
+
+
+

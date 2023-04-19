@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { userLogout } from "../features/Store/Slices/userSlice";
 import { Badge } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { CartState } from "../features/Store/Slices/cartSlice";
+
 
 
 const Header = () => {
@@ -14,7 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-    const cartQuantity = useSelector((state: any) => {
+    const cartQuantity = useSelector((state: CartState) => {
       console.log(state.counter,"HSjhsgdhsdf!+++===")
       return state.cart.counter;
     });

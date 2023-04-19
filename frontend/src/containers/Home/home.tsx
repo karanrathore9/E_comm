@@ -2,19 +2,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  setCartItems,
-  incrementCounter,
-  decrementCounter,
+setCartItems,
+incrementCounter,
+decrementCounter,
 } from "../../features/Store/Slices/cartSlice";
 import {
-  Table,
-  Card,
-  Button,
-  Container,
-  Row,
-  Col,
-  Form,
-  Spinner,
+Table,
+Card,
+Button,
+Container,
+Row,
+Col,
+Form,
+Spinner,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./style.css";
@@ -22,99 +22,111 @@ import { useDispatch } from "react-redux";
 
 import { FaSearch, FaHeart } from "react-icons/fa";
 import {
-  getAllProducts,
-  addToCart,
-  addToWishlist,
+getAllProducts,
+addToCart,
+addToWishlist,
 } from "../../services/Product";
 
-interface ProductItem {
-  _id: string;
-  name: string;
-  price: number;
-  description: string;
-  productPicture: string;
-  // category: Category;
+interface Category {
+name: string;
 }
 
-const Home = () => {
-  const [product, setProduct] = useState<ProductItem[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
+interface ProductItem {
+_id: string;
+name: string;
+price: number;
+description: string;
+productPicture: string;
+// category: Category;
+}
 
-  const dispatch = useDispatch();
+const Home = (): JSX.Element => {
+const [product, setProduct] = useState<ProductItem[]>([]);
+const [selectedCategory, setSelectedCategory] = useState<string>("All");
+const [searchTerm, setSearchTerm] = useState<string>("");
+const userId: string | null = localStorage.getItem("userId");
+const token: string | null = localStorage.getItem("token");
 
-  useEffect(() => {
-    loadAllProducts();
-  }, []);
+const dispatch = useDispatch();
 
-  const loadAllProducts = async () => {
-    const products = await getAllProducts();
-    setProduct(products);
-  };
+useEffect(() => {
+loadAllProducts();
+}, []);
 
-  const handleCategoryClick = async (category: string) => {
-    setSelectedCategory(category);
-    const products = await getAllProducts(category, searchTerm);
-    setProduct(products);
-  };
+const loadAllProducts = async (): Promise<void> => {
+const products= await getAllProducts();
+setProduct(products);
+};
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const products = await getAllProducts(selectedCategory, searchTerm);
-    setProduct(products);
-  };
+const handleCategoryClick = async (category: string): Promise<void> => {
+setSelectedCategory(category);
+const products: ProductItem[] = await getAllProducts(category, searchTerm);
+setProduct(products);
+};
 
-  const getUniqueData = (data: any, property: any) => {
-    let newVal = data.map((curElem: any) => {
-      return curElem[property].name;
-    });
-    return (newVal = ["All", ...new Set(newVal)]);
-    console.log(newVal);
-  };
+const handleSubmit = async (
+e: React.FormEvent<HTMLFormElement>
+): Promise<void> => {
+e.preventDefault();
+const products: ProductItem[] = await getAllProducts(
+selectedCategory,
+searchTerm
+);
+setProduct(products);
+};
 
-  const categoryOnlyData = getUniqueData(product, "category");
+const getUniqueData = (
+data: ProductItem[],
+property: string
+): string[] => {
+let newVal: string[] = data.map((curElem: any) => {
+return curElem[property].name;
+});
+newVal = ["All", ...new Set(newVal)];
+console.log(newVal);
+return newVal;
+};
 
-  const addtoCart = (id: any, price: any) => {
-    dispatch(incrementCounter());
-    addToCart(userId, id, price);
-  };
+const categoryOnlyData: string[] = getUniqueData(product, "category");
 
-  const addToWishlis = (id: any) => {
-    addToWishlist(userId, id);
-  };
+const addtoCart = (id: string, price: number): void => {
+dispatch(incrementCounter());
+addToCart(userId, id, price);
+};
 
+const addToWishlis = (id: string): void => {
+addToWishlist(userId, id);
+};
+return (
+  <>
+  <Row>
+  <Col md={2}>
+  <Form className="d-flex" onSubmit={handleSubmit}>
+  <Form.Control
+  type="search"
+  placeholder="Search"
+  className="me-2"
+  aria-label="Search"
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <Button type="submit">
+  <FaSearch />
+  </Button>
+  </Form>
+  <h5>Filter By Category</h5>
+  <div>
+  {categoryOnlyData.map((curElem: string, index: number) => {
   return (
-    <>
-      <Row>
-        <Col md={2}>
-          <Form className="d-flex" onSubmit={handleSubmit}>
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Button type="submit">
-              <FaSearch />
-            </Button>
-          </Form>
-          <h5>Filter By Category</h5>
-          <div>
-            {categoryOnlyData.map((curElem: any, index) => {
-              return (
-                <button
-                  key={index}
-                  type="button"
-                  name="category"
-                  value={curElem}
-                  onClick={() => handleCategoryClick(curElem)}
-                >
-                  {curElem}
-                </button>
+  <button
+  key={index}
+  type="button"
+  name="category"
+  value={curElem}
+  onClick={() => handleCategoryClick(curElem)}
+  >
+  {curElem}
+  </button>
               );
             })}
           </div>
@@ -166,3 +178,6 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
